@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas Markets — Trade Critical Minerals</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0C10;
+  --bg-elevated: #12151C;
+  --bg-card: #161A24;
+  --surface: #1C2130;
+  --border: #252B3B;
+  --text-primary: #E8ECF4;
+  --text-secondary: #8892A8;
+  --text-muted: #5A6478;
+  --accent: #3ECFA0;
+  --accent-dim: #2A9B74;
+  --accent-glow: rgba(62, 207, 160, 0.15);
+  --warm: #D4A053;
+  --red: #E85D5D;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow-x: hidden; }
+
+/* ===== NOISE TEXTURE OVERLAY ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ===== GRID BACKGROUND ===== */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(62, 207, 160, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 207, 160, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== NAVIGATION ===== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(10, 12, 16, 0.8);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--bg);
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text-primary); }
+.nav-links a.btn-primary { color: #000; }
+.nav-links a.btn-primary:hover { color: #000; }
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #4DE8B5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 140px 40px 80px;
+  z-index: 1;
+}
+
+.hero-glow {
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(62, 207, 160, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-glow-2 {
+  position: absolute;
+  bottom: -100px;
+  left: -300px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 160, 83, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-content {
+  max-width: 900px;
+  position: relative;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  letter-spacing: 0.03em;
+  animation: fadeUp 0.8s ease both;
+}
+
+.hero-tag .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(52px, 7vw, 88px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 19px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin-bottom: 44px;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+
+.btn-secondary {
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== LIVE TICKER ===== */
+.ticker-bar {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+  padding: 16px 40px;
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  animation: fadeUp 0.8s 0.4s ease both;
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ticker-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.ticker-value {
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.ticker-change {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.ticker-change.up {
+  color: var(--accent);
+  background: rgba(62, 207, 160, 0.1);
+}
+
+.ticker-change.down {
+  color: var(--red);
+  background: rgba(232, 93, 93, 0.1);
+}
+
+/* ===== THESIS SECTION ===== */
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 120px 40px;
+}
+
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--warm);
+}
+
+.section-desc {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin-bottom: 60px;
+}
+
+/* ===== STATS ROW ===== */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 80px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  padding: 40px 36px;
+}
+
+.stat-number {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-number .accent { color: var(--accent); }
+.stat-number .warm { color: var(--warm); }
+
+.stat-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ===== PROBLEM / SOLUTION ===== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.col-card {
+  background: var(--bg-card);
+  padding: 48px 40px;
+}
+
+.col-card h3 {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.col-card p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.col-card .highlight {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ===== HOW IT WORKS ===== */
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.flow-card {
+  background: var(--bg-card);
+  padding: 44px 36px;
+  position: relative;
+}
+
+.flow-number {
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--surface);
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  line-height: 1;
+}
+
+.flow-card h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.flow-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  position: relative;
+}
+
+/* ===== GEOPOLITICAL CONTEXT ===== */
+.context-banner {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 48px 52px;
+  position: relative;
+  overflow: hidden;
+}
+
+.context-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--warm));
+}
+
+.context-quote {
+  font-family: var(--serif);
+  font-size: 28px;
+  line-height: 1.5;
+  font-style: italic;
+  margin-bottom: 24px;
+  max-width: 800px;
+}
+
+.context-quote em { color: var(--accent); font-style: italic; }
+
+.context-detail {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  max-width: 700px;
+}
+
+.context-detail strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ===== ORACLE SECTION ===== */
+.oracle-visual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.oracle-left {
+  background: var(--bg-card);
+  padding: 48px 40px;
+}
+
+.oracle-left h3 {
+  font-family: var(--serif);
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.oracle-left p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.source-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.source-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.source-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.source-dot.secondary { background: var(--warm); }
+.source-dot.tertiary { background: var(--text-muted); }
+
+.oracle-right {
+  background: var(--bg-card);
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.oracle-price-display {
+  margin-bottom: 32px;
+}
+
+.oracle-asset-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.oracle-price-big {
+  font-size: 48px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.oracle-price-big .currency { color: var(--text-muted); font-size: 28px; }
+
+.oracle-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.oracle-meta-row {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.oracle-meta-label { color: var(--text-muted); }
+.oracle-meta-value { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+
+/* ===== FOUNDER SECTION ===== */
+.founder-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 52px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 44px;
+  align-items: start;
+}
+
+.founder-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-dim), var(--warm));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 32px;
+  color: var(--bg);
+  flex-shrink: 0;
+}
+
+.founder-info h3 {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.founder-role {
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.founder-bio {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.founder-creds {
+  display: flex;
+  gap: 32px;
+}
+
+.cred-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cred-number {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cred-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+/* ===== CTA SECTION ===== */
+.cta-section {
+  position: relative;
+  z-index: 1;
+  padding: 120px 40px;
+  text-align: center;
+}
+
+.cta-section .cta-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-section h2 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 400;
+  margin-bottom: 20px;
+  line-height: 1.15;
+}
+
+.cta-section h2 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.cta-section p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.cta-glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(62, 207, 160, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 28px;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--text-secondary); }
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 120px 20px 60px; }
+  .section { padding: 80px 20px; }
+  .stats-row, .two-col, .flow-grid, .oracle-visual { grid-template-columns: 1fr; }
+  .ticker-bar { flex-wrap: wrap; gap: 24px; padding: 16px 20px; justify-content: flex-start; }
+  .founder-card { grid-template-columns: 1fr; padding: 32px; }
+  .founder-creds { flex-wrap: wrap; gap: 20px; }
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+  .cta-actions { flex-direction: column; align-items: center; }
+  .cta-section { padding: 80px 20px; }
+  footer { flex-direction: column; gap: 20px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    ATLAS
+  </div>
+  <div class="nav-links">
+    <a href="#thesis">Thesis</a>
+    <a href="#oracle">Oracle</a>
+    <a href="#how">How It Works</a>
+    <a href="#team">Team</a>
+    <a href="/trade" class="btn-primary">Launch App</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="dot"></span>
+      First liquid futures market for critical minerals
+    </div>
+    <h1>Trade <em>Lithium.</em></h1>
+    <p class="hero-sub">
+      Perpetual futures on the commodities that power the energy transition.
+      Transparent pricing. Institutional-grade oracle. Built for the post-China supply chain.
+    </p>
+    <div class="hero-actions">
+      <a href="/trade" class="btn-primary">Start Trading</a>
+      <a href="#thesis" class="btn-secondary">Read the Thesis →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-item">
+    <span class="ticker-label">Li₂CO₃ 99.5%</span>
+    <span class="ticker-value">$11,240</span>
+    <span class="ticker-change up">+2.4%</span>
+  </div>
+  <div class="ticker-item">
+    <span class="ticker-label">Cobalt Metal</span>
+    <span class="ticker-value">$28,850</span>
+    <span class="ticker-change down">-1.1%</span>
+  </div>
+  <div class="ticker-item">
+    <span class="ticker-label">Nickel Sulfate</span>
+    <span class="ticker-value">$4,320</span>
+    <span class="ticker-change up">+0.7%</span>
+  </div>
+  <div class="ticker-item">
+    <span class="ticker-label">Oracle Status</span>
+    <span class="ticker-value" style="color: var(--accent); font-size: 14px;">● LIVE</span>
+  </div>
+</div>
+
+<!-- THESIS -->
+<section class="section" id="thesis">
+  <div class="section-inner">
+    <div class="section-label reveal">The Problem</div>
+    <h2 class="section-title reveal">
+      $5 billion to secure supply.<br><em>No infrastructure to trade it.</em>
+    </h2>
+    <p class="section-desc reveal">
+      Western governments are pouring capital into critical mineral supply chains to decouple from China. 
+      But the financial infrastructure to price, hedge, and finance these minerals doesn't exist.
+    </p>
+
+    <div class="stats-row reveal">
+      <div class="stat-card">
+        <div class="stat-number"><span class="accent">70%</span></div>
+        <div class="stat-desc">of frontier critical mineral supply flows through Chinese offtakers who provide financing at 15–25% discounts to spot</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number"><span class="warm">10×</span></div>
+        <div class="stat-desc">lithium carbonate price move from 2020–2024, with no hedging tools available to producers or consumers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$0</div>
+        <div class="stat-desc">liquid derivative markets for battery-grade lithium, cobalt metal, or nickel sulfate that match real production specs</div>
+      </div>
+    </div>
+
+    <div class="two-col reveal">
+      <div class="col-card">
+        <h3>Without hedging</h3>
+        <p>
+          A lithium producer in Chile needs $100M to expand. Western banks say: 
+          <span class="highlight">"How do we know you can service the debt if lithium drops 60%?"</span>
+          Without a hedge, the bank says no — or demands 15%+ interest. The producer's only option is a Chinese offtaker 
+          who'll finance in exchange for 80% of production at a steep discount. Locked in. Single buyer dependency.
+        </p>
+      </div>
+      <div class="col-card">
+        <h3>With Atlas</h3>
+        <p>
+          The same producer hedges 60% of output at $11,000/ton on Atlas. Goes back to the bank: 
+          <span class="highlight">"Revenue is locked in. Here's the position."</span>
+          Bank lends at 9%, lighter covenants, bigger facility. The producer saves $6M/year in financing costs 
+          and keeps their offtake freedom. No Chinese dependency.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GEOPOLITICAL CONTEXT -->
+<section class="section" style="padding-top: 0;">
+  <div class="section-inner">
+    <div class="context-banner reveal">
+      <div class="context-quote">
+        "Policy secures supply. <em>Atlas makes it tradable.</em>"
+      </div>
+      <p class="context-detail">
+        The US government just backed a <strong>$1.8B consortium (Orion CMC)</strong> to acquire critical mineral assets globally — 
+        including a <strong>$9B stake in Glencore's DRC cobalt operations</strong>, announced February 2026. 
+        The IRA, EU CRMA, and CHIPS Act are channeling hundreds of billions toward supply diversification. 
+        But capital without market infrastructure is capital without leverage. Atlas builds the missing financial layer.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how" style="padding-top: 0;">
+  <div class="section-inner">
+    <div class="section-label reveal">How It Works</div>
+    <h2 class="section-title reveal">Three layers, <em>one product</em></h2>
+    <p class="section-desc reveal">
+      A proprietary oracle, cash-settled perpetual futures, and an institutional-grade wrapper — 
+      delivered through a single interface.
+    </p>
+
+    <div class="flow-grid reveal">
+      <div class="flow-card">
+        <div class="flow-number">01</div>
+        <h3>Proprietary Oracle</h3>
+        <p>
+          Multi-source price aggregation from global commodity assessment services. 
+          Transparent methodology. Real-time interpolation between assessment windows. 
+          Auditable, open, verifiable.
+        </p>
+      </div>
+      <div class="flow-card">
+        <div class="flow-number">02</div>
+        <h3>Perpetual Futures</h3>
+        <p>
+          Cash-settled perps with USDC collateral. No expiry, no physical delivery. 
+          Tight spreads from professional market making. Up to 10× leverage on launch.
+        </p>
+      </div>
+      <div class="flow-card">
+        <div class="flow-number">03</div>
+        <h3>Institutional Wrapper</h3>
+        <p>
+          Hedge accounting compatibility. Compliance documentation. API integrations for treasury systems.
+          Built for a mining CFO, not just a crypto trader.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORACLE -->
+<section class="section" id="oracle" style="padding-top: 0;">
+  <div class="section-inner">
+    <div class="section-label reveal">The Oracle</div>
+    <h2 class="section-title reveal">Price discovery, <em>from scratch</em></h2>
+    <p class="section-desc reveal">
+      No existing benchmark serves frontier producers. We built one — aggregating from 
+      the same sources the physical market trusts, with the transparency crypto demands.
+    </p>
+
+    <div class="oracle-visual reveal">
+      <div class="oracle-left">
+        <h3>Data Sources</h3>
+        <p>
+          Our oracle aggregates assessments from the leading commodity price reporting agencies, 
+          weighted by methodology quality and market coverage. Outlier detection and circuit breakers 
+          protect against manipulation.
+        </p>
+        <ul class="source-list">
+          <li><span class="source-dot"></span> Shanghai Metals Market (SMM)</li>
+          <li><span class="source-dot"></span> London Metal Exchange (LME)</li>
+          <li><span class="source-dot secondary"></span> Fastmarkets</li>
+          <li><span class="source-dot secondary"></span> Benchmark Minerals Intelligence</li>
+          <li><span class="source-dot tertiary"></span> CRU Group</li>
+          <li><span class="source-dot tertiary"></span> S&P Global Platts</li>
+          <li><span class="source-dot tertiary"></span> Cochilco (Chile) / ESDM (Indonesia)</li>
+        </ul>
+      </div>
+      <div class="oracle-right">
+        <div class="oracle-price-display">
+          <div class="oracle-asset-label">Lithium Carbonate 99.5% Battery Grade</div>
+          <div class="oracle-price-big"><span class="currency">$</span>11,240<span class="currency">/t</span></div>
+        </div>
+        <div class="oracle-meta">
+          <div class="oracle-meta-row">
+            <span class="oracle-meta-label">Last Assessment</span>
+            <span class="oracle-meta-value">14:30 UTC</span>
+          </div>
+          <div class="oracle-meta-row">
+            <span class="oracle-meta-label">Sources Active</span>
+            <span class="oracle-meta-value">5 / 7</span>
+          </div>
+          <div class="oracle-meta-row">
+            <span class="oracle-meta-label">24h Range</span>
+            <span class="oracle-meta-value">$10,980 — $11,340</span>
+          </div>
+          <div class="oracle-meta-row">
+            <span class="oracle-meta-label">30d Volatility</span>
+            <span class="oracle-meta-value">18.4%</span>
+          </div>
+          <div class="oracle-meta-row" style="border: none;">
+            <span class="oracle-meta-label">Methodology</span>
+            <span class="oracle-meta-value" style="color: var(--accent);">View Full Spec →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section" id="team" style="padding-top: 0;">
+  <div class="section-inner">
+    <div class="section-label reveal">Founder</div>
+    <h2 class="section-title reveal" style="margin-bottom: 40px;">Built for <em>this moment</em></h2>
+
+    <div class="founder-card reveal">
+      <div class="founder-avatar">CN</div>
+      <div class="founder-info">
+        <h3>Charles Nichols</h3>
+        <div class="founder-role">Founder & CEO</div>
+        <p class="founder-bio">
+          Co-founded SunCulture, scaling solar asset finance to 30,000+ customers across East Africa.
+          Founded Nuzo, building local currency stablecoin infrastructure with agent distribution networks.
+          Rare combination: emerging market operational experience, frontier tech infrastructure, 
+          and institutional fundraising credibility. Not a crypto founder pitching institutions — 
+          a proven EM fintech operator who understands how to structure financeable assets from 
+          illiquid collateral in weak banking environments.
+        </p>
+        <div class="founder-creds">
+          <div class="cred-item">
+            <div class="cred-number">$100M+</div>
+            <div class="cred-label">Raised at SunCulture</div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-number">30,000+</div>
+            <div class="cred-label">Customers in frontier markets</div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-number">2</div>
+            <div class="cred-label">EM fintech companies built</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <h2>The future of commodities<br>is <em>on-chain.</em></h2>
+    <p>
+      Atlas Markets is building the financial infrastructure to make frontier 
+      critical minerals tradable, hedgeable, and financeable.
+    </p>
+    <div class="cta-actions">
+      <a href="/trade" class="btn-primary">Launch App</a>      <a href="#" class="btn-secondary">Read the Docs →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">© 2026 Atlas Markets. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="#">Documentation</a>
+    <a href="#">Oracle Methodology</a>
+    <a href="#">Twitter</a>
+    <a href="#">Discord</a>
+    <a href="#">GitHub</a>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+
+// Simulated price tick animation
+const tickerValues = document.querySelectorAll('.ticker-value');
+function animateTick() {
+  tickerValues.forEach(el => {
+    if (el.textContent.includes('$')) {
+      const base = parseFloat(el.textContent.replace(/[$,]/g, ''));
+      const delta = (Math.random() - 0.5) * base * 0.001;
+      const newVal = (base + delta).toFixed(0);
+      el.textContent = '$' + Number(newVal).toLocaleString();
+    }
+  });
+}
+setInterval(animateTick, 3000);
+</script>
+
+</body>
+</html>
