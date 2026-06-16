@@ -790,11 +790,11 @@ footer {
     ATLAS
   </div>
   <div class="nav-links">
+    <a href="#baskets">Indices</a>
     <a href="#thesis">Thesis</a>
     <a href="#oracle">Oracle</a>
-    <a href="#how">How It Works</a>
-    <a href="#team">Team</a>
-    <a href="https://dev.atlas.markets/trade" class="btn-primary">Launch App</a>
+    <a href="#licensing">Licensing</a>
+    <a href="/trade" class="btn-primary">Launch App</a>
   </div>
 </nav>
 
@@ -805,49 +805,100 @@ footer {
   <div class="hero-content">
     <div class="hero-tag">
       <span class="dot"></span>
-      First liquid futures market for critical minerals
+      The liquid futures market for critical minerals
     </div>
-    <h1>Trade <em>Lithium.</em></h1>
+    <h1>Trade the minerals powering<br><em>AI, defense, and energy.</em></h1>
     <p class="hero-sub">
-      Perpetual futures on the commodities that power AI, national security and the energy transition.
-      Transparent pricing. Institutional-grade oracle. Built for next generation supply chains.
+      Perpetual futures and thematic indices on lithium, copper, rare earths and the
+      critical-minerals supply chain. Transparent pricing from a proprietary multi-source oracle.
     </p>
     <div class="hero-actions">
-      <a href="https://dev.atlas.markets/trade" class="btn-primary">Start Trading</a>
-      <a href="#thesis" class="btn-secondary">Read the Thesis →</a>
+      <a href="/trade" class="btn-primary">Start Trading</a>
+      <a href="#baskets" class="btn-secondary">Explore the Indices →</a>
     </div>
   </div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-item">
-    <span class="ticker-label">Li₂CO₃ 99.5%</span>
-    <span class="ticker-value">$22,442</span>
-    <span class="ticker-change up">+2.4%</span>
-  </div>
-  <div class="ticker-item">
-    <span class="ticker-label">Cobalt Metal</span>
-    <span class="ticker-value">$56,293</span>
-    <span class="ticker-change down">-1.1%</span>
-  </div>
-  <div class="ticker-item">
-    <span class="ticker-label">Nickel Sulfate</span>
-    <span class="ticker-value">$17,670</span>
-    <span class="ticker-change up">+0.7%</span>
-  </div>
-  <div class="ticker-item">
-    <span class="ticker-label">Oracle Status</span>
-    <span class="ticker-value" style="color: var(--accent); font-size: 14px;">● LIVE</span>
-  </div>
+<!-- TICKER (live from /v4/perpetualMarkets) -->
+<div class="ticker-bar" id="tickerBar">
+  <div class="ticker-item"><span class="ticker-label">Loading live prices…</span></div>
 </div>
+
+<style>
+.basket-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.basket-card{background:var(--surface,#10151b);border:1px solid var(--border,#1d262f);border-radius:16px;padding:26px;text-align:left;transition:border-color .15s,transform .15s}
+.basket-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.basket-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.basket-name{font-size:18px;font-weight:700;color:var(--text,#e8edf2)}
+.basket-tkr{font-size:11px;letter-spacing:.08em;color:var(--text-dim,#8aa);font-family:ui-monospace,monospace}
+.basket-price{font-size:30px;font-weight:800;margin:14px 0 4px;font-variant-numeric:tabular-nums}
+.basket-chg{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.basket-chg.up{color:#2ebd85}.basket-chg.down{color:#e5484d}
+.basket-desc{font-size:13px;color:var(--text-dim,#9fb0bf);line-height:1.55;margin:16px 0 14px}
+.basket-cons{display:flex;flex-wrap:wrap;gap:6px}
+.basket-chip{font-size:10.5px;font-weight:600;letter-spacing:.03em;color:var(--text-dim,#9fb0bf);background:rgba(255,255,255,.04);border:1px solid var(--border,#1d262f);border-radius:6px;padding:3px 7px}
+.lic-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;margin-top:48px;align-items:center}
+.lic-points{list-style:none;padding:0;margin:22px 0 0}
+.lic-points li{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;font-size:14.5px;color:var(--text-dim,#9fb0bf);line-height:1.5}
+.lic-points li b{color:var(--text,#e8edf2);font-weight:600}
+.lic-points .pdot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:7px;flex:0 0 auto}
+.lic-card{background:var(--surface,#10151b);border:1px solid var(--border,#1d262f);border-radius:16px;padding:30px}
+.lic-card h3{font-size:18px;margin:0 0 6px}
+.lic-card p{font-size:13px;color:var(--text-dim,#9fb0bf);margin:0 0 18px;line-height:1.5}
+.lic-field{width:100%;background:#0b0e11;border:1px solid var(--border,#1d262f);border-radius:9px;padding:11px 13px;color:var(--text,#e8edf2);font-size:14px;margin-bottom:11px;box-sizing:border-box;font-family:inherit}
+.lic-field:focus{outline:none;border-color:var(--accent)}
+.lic-msg{font-size:13px;margin-top:10px;min-height:18px}
+@media(max-width:860px){.basket-grid{grid-template-columns:1fr}.lic-wrap{grid-template-columns:1fr;gap:28px}}
+</style>
+
+<!-- THEMATIC BASKETS / INDICES -->
+<section class="section" id="baskets">
+  <div class="section-inner">
+    <div class="section-label reveal">Thematic Indices</div>
+    <h2 class="section-title reveal">Trade the <em>theme</em>, not just the metal</h2>
+    <p class="section-desc reveal">
+      One ticker for a whole supply chain. Atlas indices are weighted-dollar baskets of the minerals
+      behind AI data centers, defense systems and the energy transition — rebalanced from the same
+      proprietary oracle that prices every single market.
+    </p>
+    <div class="basket-grid reveal">
+      <div class="basket-card">
+        <div class="basket-top"><span class="basket-name">AI Critical Minerals</span><span class="basket-tkr">AI-USD</span></div>
+        <div class="basket-price" id="bk-AI-USD-px">—</div>
+        <div class="basket-chg" id="bk-AI-USD-chg">—</div>
+        <div class="basket-desc">The minerals inside AI capex — chips, servers, power and cooling.</div>
+        <div class="basket-cons">
+          <span class="basket-chip">Cu 18</span><span class="basket-chip">REE 13</span><span class="basket-chip">Al 12</span><span class="basket-chip">Ag 12</span><span class="basket-chip">Ni 10</span><span class="basket-chip">Ga 9</span><span class="basket-chip">Li 9</span><span class="basket-chip">Co 7</span><span class="basket-chip">Zn 6</span><span class="basket-chip">Ge 4</span>
+        </div>
+      </div>
+      <div class="basket-card">
+        <div class="basket-top"><span class="basket-name">Battery Metals</span><span class="basket-tkr">BATT-USD</span></div>
+        <div class="basket-price" id="bk-BATT-USD-px">—</div>
+        <div class="basket-chg" id="bk-BATT-USD-chg">—</div>
+        <div class="basket-desc">The lithium-ion cathode metals behind EVs and grid storage.</div>
+        <div class="basket-cons">
+          <span class="basket-chip">Li 37</span><span class="basket-chip">Co 33</span><span class="basket-chip">Ni 30</span>
+        </div>
+      </div>
+      <div class="basket-card">
+        <div class="basket-top"><span class="basket-name">Rare Earth Magnets</span><span class="basket-tkr">REE-USD</span></div>
+        <div class="basket-price" id="bk-REE-USD-px">—</div>
+        <div class="basket-chg" id="bk-REE-USD-chg">—</div>
+        <div class="basket-desc">The four magnet rare earths behind EVs, wind and defense — ex-China basis.</div>
+        <div class="basket-cons">
+          <span class="basket-chip">Tb 30</span><span class="basket-chip">Dy 30</span><span class="basket-chip">Nd 25</span><span class="basket-chip">Pr 15</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- THESIS -->
 <section class="section" id="thesis">
   <div class="section-inner">
     <div class="section-label reveal">The Problem</div>
     <h2 class="section-title reveal">
-      $200 billion to secure supply.<br><em>No infrastructure to trade it.</em>
+      $5 billion to secure supply.<br><em>No infrastructure to trade it.</em>
     </h2>
     <p class="section-desc reveal">
       Western governments are pouring capital into critical mineral supply chains to decouple from China. 
@@ -882,7 +933,7 @@ footer {
       <div class="col-card">
         <h3>With Atlas</h3>
         <p>
-          The same producer hedges 60% of output at $11,000/ton on Atlas. Goes back to the bank: 
+          The same producer hedges 60% of output at a locked-in price on Atlas. Goes back to the bank:
           <span class="highlight">"Revenue is locked in. Here's the position."</span>
           Bank lends at 9%, lighter covenants, bigger facility. The producer saves $6M/year in financing costs 
           and keeps their offtake freedom. No Chinese dependency.
@@ -900,10 +951,11 @@ footer {
         "Policy secures supply. <em>Atlas makes it tradable.</em>"
       </div>
       <p class="context-detail">
-        The US government just backed a <strong>$1.8B consortium (Orion CMC)</strong> to acquire critical mineral assets globally — 
-        including a <strong>$9B stake in Glencore's DRC cobalt operations</strong>, announced February 2026. 
-        The IRA, EU CRMA, and CHIPS Act are channeling hundreds of billions toward supply diversification. 
-        But capital without market infrastructure is capital without leverage. Atlas builds the missing financial layer.
+        Governments are channeling hundreds of billions into critical-mineral supply chains —
+        through the IRA, the EU Critical Raw Materials Act, the CHIPS Act and a wave of strategic
+        offtake and stockpiling programs — to reduce dependence on a single processing power.
+        But capital without market infrastructure is capital without leverage. Atlas builds the
+        missing financial layer: a transparent reference and a place to price, hedge and finance it.
       </p>
     </div>
   </div>
@@ -961,47 +1013,42 @@ footer {
 
     <div class="oracle-visual reveal">
       <div class="oracle-left">
-        <h3>Data Sources</h3>
+        <h3>A blend, not a single feed</h3>
         <p>
-          Our oracle aggregates assessments from the leading commodity price reporting agencies, 
-          weighted by methodology quality and market coverage. Outlier detection and circuit breakers 
-          protect against manipulation.
+          The Atlas oracle blends multiple independent reference inputs per mineral into one
+          continuous, manipulation-resistant price — FX-normalized to USD, tiered by source quality,
+          and gated by staleness checks, deviation clamps and circuit breakers. Atlas's own
+          venue data is deliberately excluded so the reference never becomes self-referential.
         </p>
         <ul class="source-list">
-          <li><span class="source-dot"></span> Shanghai Metals Market (SMM)</li>
-          <li><span class="source-dot"></span> London Metal Exchange (LME)</li>
-          <li><span class="source-dot secondary"></span> Fastmarkets</li>
-          <li><span class="source-dot secondary"></span> Benchmark Minerals Intelligence</li>
-          <li><span class="source-dot tertiary"></span> CRU Group</li>
-          <li><span class="source-dot tertiary"></span> S&P Global Platts</li>
-          <li><span class="source-dot tertiary"></span> Cochilco (Chile) / ESDM (Indonesia)</li>
+          <li><span class="source-dot"></span> Multi-source tiered blend with quality weighting</li>
+          <li><span class="source-dot"></span> Median aggregation + outlier rejection</li>
+          <li><span class="source-dot secondary"></span> FX normalization to USD/tonne</li>
+          <li><span class="source-dot secondary"></span> Staleness gates &amp; deviation circuit breakers</li>
+          <li><span class="source-dot tertiary"></span> Perp-implied price discovery layered on top</li>
         </ul>
       </div>
       <div class="oracle-right">
         <div class="oracle-price-display">
-          <div class="oracle-asset-label">Lithium Carbonate 99.5% Battery Grade</div>
-          <div class="oracle-price-big"><span class="currency">$</span>11,240<span class="currency">/t</span></div>
+          <div class="oracle-asset-label" id="oracleAsset">Lithium Carbonate 99.5%</div>
+          <div class="oracle-price-big"><span class="currency">$</span><span id="oraclePrice">—</span><span class="currency">/t</span></div>
         </div>
         <div class="oracle-meta">
           <div class="oracle-meta-row">
-            <span class="oracle-meta-label">Last Assessment</span>
-            <span class="oracle-meta-value">14:30 UTC</span>
+            <span class="oracle-meta-label">Reference</span>
+            <span class="oracle-meta-value">PRA Composite blend</span>
           </div>
           <div class="oracle-meta-row">
-            <span class="oracle-meta-label">Sources Active</span>
-            <span class="oracle-meta-value">5 / 7</span>
+            <span class="oracle-meta-label">Status</span>
+            <span class="oracle-meta-value" id="oracleStatus" style="color: var(--accent);">● Live</span>
           </div>
           <div class="oracle-meta-row">
             <span class="oracle-meta-label">24h Range</span>
-            <span class="oracle-meta-value">$10,980 — $11,340</span>
-          </div>
-          <div class="oracle-meta-row">
-            <span class="oracle-meta-label">30d Volatility</span>
-            <span class="oracle-meta-value">18.4%</span>
+            <span class="oracle-meta-value" id="oracleRange">—</span>
           </div>
           <div class="oracle-meta-row" style="border: none;">
-            <span class="oracle-meta-label">Methodology</span>
-            <span class="oracle-meta-value" style="color: var(--accent);">View Full Spec →</span>
+            <span class="oracle-meta-label">Public data</span>
+            <span class="oracle-meta-value">15-min delayed · real-time under license</span>
           </div>
         </div>
       </div>
@@ -1009,39 +1056,35 @@ footer {
   </div>
 </section>
 
-<!-- TEAM -->
-<section class="section" id="team" style="padding-top: 0;">
-  <div class="section-inner">
-    <div class="section-label reveal">Founder</div>
-    <h2 class="section-title reveal" style="margin-bottom: 40px;">Built for <em>this moment</em></h2>
 
-    <div class="founder-card reveal">
-      <div class="founder-avatar">CN</div>
-      <div class="founder-info">
-        <h3>Charles Nichols</h3>
-        <div class="founder-role">Founder & CEO</div>
-        <p class="founder-bio">
-          Co-founded SunCulture, scaling solar asset finance to 30,000+ customers across East Africa.
-          Founded Nuzo, building local currency stablecoin infrastructure with agent distribution networks.
-          Rare combination: emerging market operational experience, frontier tech infrastructure, 
-          and institutional fundraising credibility. Not a crypto founder pitching institutions — 
-          a proven EM fintech operator who understands how to structure financeable assets from 
-          illiquid collateral in weak banking environments.
-        </p>
-        <div class="founder-creds">
-          <div class="cred-item">
-            <div class="cred-number">$100M+</div>
-            <div class="cred-label">Raised at SunCulture</div>
-          </div>
-          <div class="cred-item">
-            <div class="cred-number">30,000+</div>
-            <div class="cred-label">Customers in frontier markets</div>
-          </div>
-          <div class="cred-item">
-            <div class="cred-number">2</div>
-            <div class="cred-label">EM fintech companies built</div>
-          </div>
-        </div>
+<!-- DATA / INDEX LICENSING -->
+<section class="section" id="licensing" style="padding-top:0">
+  <div class="section-inner">
+    <div class="section-label reveal">Index &amp; Data Licensing</div>
+    <h2 class="section-title reveal">License the <em>price of the supply chain</em></h2>
+    <p class="section-desc reveal">
+      The Atlas oracle and the perp-implied Atlas Spot are a licensable reference. The public API is
+      delayed 15 minutes — aligned venues, desks, funds and indices license the real-time feed, the
+      thematic index marks, and the underlying methodology.
+    </p>
+    <div class="lic-wrap reveal">
+      <ul class="lic-points">
+        <li><span class="pdot"></span><span><b>Real-time oracle &amp; Atlas Spot</b> — sub-second reference for the metals and the AI / Battery / REE indices, vs the 15-minute public delay.</span></li>
+        <li><span class="pdot"></span><span><b>Settle &amp; mark against Atlas</b> — use the indices to price OTC deals, structured notes, ETFs and offtake contracts.</span></li>
+        <li><span class="pdot"></span><span><b>Methodology &amp; history</b> — full construction spec plus historical series for backtesting and product design.</span></li>
+        <li><span class="pdot"></span><span><b>Co-branded indices</b> — launch a venue- or theme-specific basket calculated and published by Atlas.</span></li>
+      </ul>
+      <div class="lic-card">
+        <h3>Request licensing access</h3>
+        <p>Tell us how you'd use the feed and we'll follow up with terms.</p>
+        <form id="licForm" onsubmit="return submitLic(event)">
+          <input class="lic-field" id="licName" type="text" placeholder="Name" required>
+          <input class="lic-field" id="licEmail" type="email" placeholder="Work email" required>
+          <input class="lic-field" id="licOrg" type="text" placeholder="Company / venue">
+          <textarea class="lic-field" id="licNote" rows="3" placeholder="How would you use the feed? (optional)"></textarea>
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center" id="licBtn">Request access</button>
+          <div class="lic-msg" id="licMsg"></div>
+        </form>
       </div>
     </div>
   </div>
@@ -1057,20 +1100,19 @@ footer {
       critical minerals tradable, hedgeable, and financeable.
     </p>
     <div class="cta-actions">
-      <a href="https://dev.atlas.markets/trade" class="btn-primary">Launch App</a>      <a href="#" class="btn-secondary">Read the Docs →</a>
+      <a href="/trade" class="btn-primary">Launch App</a>      <a href="#licensing" class="btn-secondary">License the Index →</a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-left">© 2026 Atlas Markets. All rights reserved.</div>
+  <div class="footer-left">© 2026 Atlas Markets</div>
   <div class="footer-links">
-    <a href="#">Documentation</a>
-    <a href="#">Oracle Methodology</a>
-    <a href="#">Twitter</a>
-    <a href="#">Discord</a>
-    <a href="#">GitHub</a>
+    <a href="/trade">Launch App</a>
+    <a href="#baskets">Indices</a>
+    <a href="#licensing">Licensing</a>
+    <a href="/trade/api.html">API</a>
   </div>
 </footer>
 
@@ -1087,19 +1129,65 @@ const observer = new IntersectionObserver((entries) => {
 
 reveals.forEach(el => observer.observe(el));
 
-// Simulated price tick animation
-const tickerValues = document.querySelectorAll('.ticker-value');
-function animateTick() {
-  tickerValues.forEach(el => {
-    if (el.textContent.includes('$')) {
-      const base = parseFloat(el.textContent.replace(/[$,]/g, ''));
-      const delta = (Math.random() - 0.5) * base * 0.001;
-      const newVal = (base + delta).toFixed(0);
-      el.textContent = '$' + Number(newVal).toLocaleString();
+// ── Live market data from the exchange API ───────────────────────────────────
+const NAMES = { 'LI-USD':'Lithium','CO-USD':'Cobalt','NI-USD':'Nickel','CU-USD':'Copper',
+  'AL-USD':'Aluminum','AG-USD':'Silver','ZN-USD':'Zinc','REE-USD':'Rare Earths',
+  'AI-USD':'AI Minerals','BATT-USD':'Battery Metals' };
+const TICKER_ORDER = ['AI-USD','BATT-USD','REE-USD','LI-USD','CU-USD','CO-USD','NI-USD','AG-USD'];
+const fmt = n => '$' + Number(n).toLocaleString(undefined,{maximumFractionDigits: n<100?2:0});
+const pct = n => (n>=0?'+':'') + Number(n).toFixed(2) + '%';
+
+async function loadMarkets(){
+  try{
+    const r = await fetch('/v4/perpetualMarkets'); const d = await r.json();
+    const M = d.markets || d;
+    // Ticker
+    const tb = document.getElementById('tickerBar');
+    tb.innerHTML = TICKER_ORDER.filter(k=>M[k]).map(k=>{
+      const m=M[k], chg=parseFloat(m.priceChange24H||0);
+      return `<div class="ticker-item"><span class="ticker-label">${NAMES[k]||k}</span>`+
+        `<span class="ticker-value">${fmt(parseFloat(m.markPrice||m.oraclePrice))}</span>`+
+        `<span class="ticker-change ${chg>=0?'up':'down'}">${pct(chg)}</span></div>`;
+    }).join('') + `<div class="ticker-item"><span class="ticker-label">Oracle</span>`+
+      `<span class="ticker-value" style="color:var(--accent);font-size:14px">● LIVE</span></div>`;
+    // Baskets
+    ['AI-USD','BATT-USD','REE-USD'].forEach(k=>{
+      if(!M[k]) return; const m=M[k], chg=parseFloat(m.priceChange24H||0);
+      const px=document.getElementById('bk-'+k+'-px'), cg=document.getElementById('bk-'+k+'-chg');
+      if(px) px.textContent = fmt(parseFloat(m.markPrice||m.oraclePrice));
+      if(cg){ cg.textContent = pct(chg)+' · 24h'; cg.className='basket-chg '+(chg>=0?'up':'down'); }
+    });
+    // Oracle panel (lithium)
+    const li=M['LI-USD'];
+    if(li){
+      document.getElementById('oraclePrice').textContent = Number(parseFloat(li.oraclePrice)).toLocaleString(undefined,{maximumFractionDigits:0});
+      const lo=li.low24H, hi=li.high24H;
+      if(lo&&hi) document.getElementById('oracleRange').textContent = fmt(parseFloat(lo))+' — '+fmt(parseFloat(hi));
+      const st=document.getElementById('oracleStatus');
+      const live=(li.oracleState||'FRESH')==='FRESH';
+      st.textContent = live?'● Live':'● '+(li.oracleState||'');
+      st.style.color = live?'var(--accent)':'#e5a23d';
     }
-  });
+  }catch(e){ /* leave placeholders on error */ }
 }
-setInterval(animateTick, 3000);
+loadMarkets(); setInterval(loadMarkets, 10000);
+
+// ── Licensing intent capture ─────────────────────────────────────────────────
+async function submitLic(ev){
+  ev.preventDefault();
+  const btn=document.getElementById('licBtn'), msg=document.getElementById('licMsg');
+  const body={ name:licName.value.trim(), email:licEmail.value.trim(), org:licOrg.value.trim(),
+    note:licNote.value.trim() };
+  if(!body.name||!body.email){ msg.style.color='#e5484d'; msg.textContent='Name and email are required.'; return false; }
+  btn.disabled=true; btn.textContent='Sending…'; msg.textContent='';
+  try{
+    const r=await fetch('/v4/licensing-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(r.ok){ msg.style.color='var(--accent)'; msg.textContent='Thanks — we’ll be in touch about licensing terms.'; document.getElementById('licForm').reset(); }
+    else { const e=await r.json().catch(()=>({})); msg.style.color='#e5484d'; msg.textContent=e.error||'Something went wrong — try again.'; }
+  }catch(e){ msg.style.color='#e5484d'; msg.textContent='Network error — try again.'; }
+  btn.disabled=false; btn.textContent='Request access';
+  return false;
+}
 </script>
 
 </body>
