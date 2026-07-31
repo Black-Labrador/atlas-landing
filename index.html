@@ -664,6 +664,9 @@ function renderCards(M) {
     if (px) px.textContent = fmtPx(m.markPrice);
     if (ch) { ch.textContent = fmtPct(c) + ' · 24h'; ch.className = 'idx-chg ' + (c >= 0 ? 'up' : 'dn'); }
     if (rg && m.low24H && m.high24H) rg.textContent = '$' + Math.round(m.low24H).toLocaleString('en-US') + '–' + Math.round(m.high24H).toLocaleString('en-US');
+    // Keep the sparkline's color in lockstep with the displayed 24h change.
+    if (chartSign[k] === undefined || (chartSign[k] >= 0) !== (c >= 0)) { chartSign[k] = c; drawSpark(k); }
+    else chartSign[k] = c;
   });
 }
 async function loadMarkets() {
@@ -675,35 +678,53 @@ async function loadMarkets() {
     renderTicker(M); renderCards(M);
   } catch (e) { /* snapshot stays */ }
 }
-async function load7d(k) {
+async function loadHistory(k) {
+  // One hourly-candles fetch per index: last 24 closes draw the real 24h
+  // sparkline; the close 168 hours back gives the 7d change.
   try {
-    const r = await fetch(API_BASE + '/v4/candles/perpetualMarkets/' + k + '?resolution=1DAY');
+    const r = await fetch(API_BASE + '/v4/candles/perpetualMarkets/' + k + '?resolution=1HOUR');
     if (!r.ok) return;
     const c = (await r.json()).candles;
-    if (!c || c.length < 8) return;
-    const last = parseFloat(c[c.length - 1].close), prior = parseFloat(c[c.length - 8].close);
-    const el = document.getElementById('w7-' + k);
-    if (el && prior > 0) el.textContent = fmtPct((last / prior - 1) * 100);
-  } catch (e) { /* keep snapshot */ }
+    if (!c || c.length < 25) return;
+    chartData[k] = c.slice(-24).map(x => parseFloat(x.close));
+    drawSpark(k);
+    if (c.length >= 169) {
+      const last = parseFloat(c[c.length - 1].close), prior = parseFloat(c[c.length - 169].close);
+      const el = document.getElementById('w7-' + k);
+      if (el && prior > 0) el.textContent = fmtPct((last / prior - 1) * 100);
+    }
+  } catch (e) { /* decorative fallback stays */ }
 }
+// Fallback shape shown until real candles arrive (or if the API is unreachable):
+// a deterministic walk whose drift and color follow the snapshot's 24h sign.
+function mulberry(seed) { return function() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+Object.keys(CHART_IDS).forEach((k, i) => {
+  const sign = (SNAP[k] && parseFloat(SNAP[k].priceChange24H) < 0) ? -1 : 1;
+  const rnd = mulberry(7 + i * 13), pts = [];
+  let v = 0;
+  for (let j = 0; j < 48; j++) { v += (rnd() - 0.5 + sign * 0.04) * 2; pts.push(v); }
+  chartData[k] = pts; chartSign[k] = sign;
+  drawSpark(k);
+});
 renderTicker(SNAP); renderCards(SNAP);
 loadMarkets(); setInterval(loadMarkets, 10000);
-['AI-USD','BATT-USD','REE-USD'].forEach(load7d);
+Object.keys(CHART_IDS).forEach(loadHistory);
 
-/* ---------- Sparkline charts (deterministic walks) ---------- */
-function mulberry(seed) { return function() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-function spark(id, seed, drift, up) {
-  const cv = document.getElementById(id); if (!cv) return;
+/* ---------- Sparkline charts (real 24h candles; color follows the displayed 24h change) ---------- */
+const CHART_IDS = { 'AI-USD': 'ch-ai', 'BATT-USD': 'ch-batt', 'REE-USD': 'ch-ree' };
+const chartData = {};   // ticker -> array of closes (last 24 hourly)
+const chartSign = {};   // ticker -> latest displayed 24h change sign
+function drawSpark(k) {
+  const cv = document.getElementById(CHART_IDS[k]); if (!cv) return;
+  const pts = chartData[k]; if (!pts || pts.length < 2) return;
+  const up = (chartSign[k] ?? (pts[pts.length - 1] - pts[0])) >= 0;
   const dpr = window.devicePixelRatio || 1;
   const w = cv.clientWidth, h = cv.clientHeight;
   cv.width = w * dpr; cv.height = h * dpr;
   const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
-  const rnd = mulberry(seed), n = 90, pts = [];
-  let v = 0;
-  for (let i = 0; i < n; i++) { v += (rnd() - 0.5 + drift) * 2; pts.push(v); }
   const mn = Math.min(...pts), mx = Math.max(...pts), rg = mx - mn || 1;
+  const n = pts.length;
   const X = i => i / (n - 1) * w, Y = p => h - 6 - (p - mn) / rg * (h - 14);
-  const col = up ? '#2ebd85' : '#e5484d';
   const grad = ctx.createLinearGradient(0, 0, 0, h);
   grad.addColorStop(0, up ? 'rgba(46,189,133,.22)' : 'rgba(229,72,77,.2)');
   grad.addColorStop(1, 'rgba(0,0,0,0)');
@@ -713,10 +734,9 @@ function spark(id, seed, drift, up) {
   ctx.fillStyle = grad; ctx.fill();
   ctx.beginPath(); ctx.moveTo(X(0), Y(pts[0]));
   for (let i = 1; i < n; i++) ctx.lineTo(X(i), Y(pts[i]));
-  ctx.strokeStyle = col; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
+  ctx.strokeStyle = up ? '#2ebd85' : '#e5484d'; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
 }
-function drawAll() { spark('ch-ai', 42, -0.004, false); spark('ch-batt', 7, 0.05, true); spark('ch-ree', 19, 0.02, true); }
-drawAll(); addEventListener('resize', drawAll);
+addEventListener('resize', () => Object.keys(CHART_IDS).forEach(drawSpark));
 
 /* ---------- Map sites ---------- */
 const SITES = [
