@@ -54,14 +54,14 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba
 .nav-cta:hover { background: #4DE8B5; }
 
 /* ---------- Hero ---------- */
-.hero { padding: 158px 0 20px; position: relative; }
-.hero::before { content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: min(900px, 100vw); height: 600px; background: radial-gradient(ellipse at center, rgba(62,207,160,0.07), transparent 65%); pointer-events: none; }
-.hero-kicker { font-family: var(--mono); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
-.hero-kicker::before { content: ''; width: 26px; height: 1px; background: var(--accent); }
-h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5.6vw, 66px); line-height: 1.08; letter-spacing: -0.01em; max-width: 860px; }
+.hero { position: relative; }
+.hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: min(900px, 100vw); height: 70vh; background: radial-gradient(ellipse at center, rgba(62,207,160,0.07), transparent 65%); pointer-events: none; }
+.hero-center { min-height: calc(100vh - 64px - 92px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 84px 32px 40px; }
+.hero-kicker { font-family: var(--mono); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 26px; display: flex; align-items: center; gap: 12px; }
+.hero-kicker::before, .hero-kicker::after { content: ''; width: 26px; height: 1px; background: var(--accent); }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(42px, 5.8vw, 74px); line-height: 1.08; letter-spacing: -0.01em; max-width: 900px; margin: 0 auto; }
 h1 em { font-style: italic; color: var(--accent); }
-.hero-sub { margin-top: 26px; font-size: 18.5px; color: var(--text-secondary); max-width: 640px; }
-.hero-actions { margin-top: 38px; display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-actions { margin-top: 42px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .btn-primary { background: var(--accent); color: #04120c; font-weight: 700; font-size: 15.5px; padding: 14px 30px; border-radius: 9px; transition: all .15s; }
 .btn-primary:hover { background: #4DE8B5; transform: translateY(-1px); }
 .btn-ghost { border: 1px solid var(--border); color: var(--text-primary); font-weight: 500; font-size: 15.5px; padding: 14px 28px; border-radius: 9px; transition: all .15s; }
@@ -159,7 +159,7 @@ h1 em { font-style: italic; color: var(--accent); }
 .canton-bar { margin-top: 54px; text-align: center; }
 .canton-bar .cb-label { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: 18px; justify-content: center; }
 .canton-bar .cb-label::before, .canton-bar .cb-label::after { content: ''; height: 1px; width: 72px; background: var(--border); }
-.cb-logos { margin-top: 26px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; column-gap: 46px; row-gap: 20px; }
+.cb-logos { margin-top: 26px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; column-gap: 38px; row-gap: 20px; }
 .cb-mark { color: var(--text-secondary); font-weight: 700; font-size: 15.5px; letter-spacing: .02em; white-space: nowrap; opacity: .95; transition: all .2s; cursor: default; }
 .cb-mark:hover { color: var(--text-primary); opacity: 1; }
 .cb-mark.serif { font-family: var(--serif); font-weight: 400; font-size: 17.5px; letter-spacing: .01em; }
@@ -279,18 +279,17 @@ footer { border-top: 1px solid var(--border); padding: 54px 0 42px; background: 
       <a href="#data">Data &amp; Licensing</a>
       <a href="#audiences">Who It's For</a>
     </div>
-    <a class="nav-cta" href="#contact">Request Access</a>
+    <a class="nav-cta" href="#contact">Get Started</a>
   </div>
 </nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
-  <div class="wrap">
+  <div class="hero-center">
     <div class="hero-kicker">Critical Minerals Market Intelligence</div>
     <h1>The price layer for the minerals powering <em>AI, energy and national&nbsp;security.</em></h1>
-    <p class="hero-sub">Critical minerals are a $500&nbsp;billion physical market with no liquid benchmarks. Atlas builds the trusted reference prices, continuous discovery and institutional distribution that every mature commodity market runs on.</p>
     <div class="hero-actions">
-      <a class="btn-primary" href="#contact">Request Access</a>
+      <a class="btn-primary" href="#contact">Get Started</a>
       <a class="btn-ghost" href="#indices">Explore the Indices →</a>
     </div>
   </div>
@@ -469,6 +468,7 @@ footer { border-top: 1px solid var(--border); padding: 54px 0 42px; background: 
       <span class="cb-mark">S&amp;P Global</span>
       <span class="cb-mark serif">Moody's</span>
       <span class="cb-mark">Tradeweb</span>
+      <span class="cb-mark wide">DRW</span>
       <span class="cb-mark">Kaiko</span>
       <span class="cb-mark wide">NOMURA</span>
       <span class="cb-mark serif">Mizuho</span>
