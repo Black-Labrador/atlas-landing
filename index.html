@@ -78,12 +78,14 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;margin:0
 
 /* stats band */
 .stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(40px,5vw,64px) 0}
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr 2fr;gap:28px}
 .stat-n{font-family:var(--serif);font-size:clamp(40px,4.6vw,64px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .stat-of{font-size:.5em;color:var(--ink-3)}
+.stat-list{font-family:var(--serif);font-size:clamp(22px,2.1vw,30px);line-height:1.25;letter-spacing:-.01em}
+.stat-wide{grid-column:span 2}
 .stat-l{margin-top:10px;font-size:13px;color:var(--ink-2)}
 .stat-src{margin-top:26px;display:flex;align-items:center;gap:9px;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:22px}}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:22px}.stat-wide{grid-column:span 2}}
 
 /* metals grid */
 .metals{padding:clamp(80px,10vw,140px) 0 0}
@@ -213,7 +215,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
     <h1>The market for critical minerals.<br>The index for the <em>supply chain.</em></h1>
     <p>Price, hedge and finance the minerals behind AI, defense and energy.</p>
     <div class="btns">
-      <a class="btn btn-light" href="https://trade.atlas.markets">Trade</a>
+      <a class="btn btn-light" href="/trade">Trade</a>
       <a class="btn btn-ghost" href="#indices">See the indices</a>
     </div>
   </div>
@@ -231,9 +233,9 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
       <div class="stat"><div class="stat-n" id="stVol">$10B+</div><div class="stat-l">Traded on testnet since August</div></div>
       <div class="stat"><div class="stat-n" id="st24">$483M</div><div class="stat-l">24-hour volume</div></div>
       <div class="stat"><div class="stat-n" id="stTrades">5,358</div><div class="stat-l">Fills in the last 24 hours</div></div>
-      <div class="stat"><div class="stat-n" id="stMk">10 <span class="stat-of">of 17</span></div><div class="stat-l">Markets live · 17 at launch</div></div>
+      <div class="stat stat-wide"><div class="stat-list" id="stMk">Lithium · Copper · Cobalt · Nickel · Silver · Aluminum · Zinc · Rare Earths · AI Minerals · Battery Metals</div><div class="stat-l">Live markets · 17 at launch</div></div>
     </div>
-    <div class="stat-src"><span class="dot amber" id="stDot"></span><span id="stSrc">Testnet figures as of 2 November 2026 · trade.atlas.markets</span></div>
+    <div class="stat-src"><span class="dot amber" id="stDot"></span><span id="stSrc">Testnet figures as of 2 November 2026</span></div>
   </div>
 </section>
 
@@ -317,7 +319,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
         <div class="idx"><span class="tk">BATT-USD</span><span class="nm">Battery Metals<small>Lithium, cobalt and nickel — the cathode basket.</small></span><span class="px" data-idx="BATT-USD">—</span></div>
         <div class="idx"><span class="tk">REE-USD</span><span class="nm">Rare Earth Magnets<small>Nd, Pr, Dy, Tb — the four magnet metals.</small></span><span class="px" data-idx="REE-USD">—</span></div>
       </div>
-      <div class="btns"><a class="btn btn-light" href="https://trade.atlas.markets">Explore the indices</a><a class="btn btn-ghost" href="#data">See the data</a></div>
+      <div class="btns"><a class="btn btn-light" href="/trade">Explore the indices</a><a class="btn btn-ghost" href="#data">See the data</a></div>
     </div>
     <div class="panel reveal">
       <div class="ph"><span>AI-USD · 24h</span><span id="panelPx">—</span></div>
@@ -352,14 +354,14 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
   <img src="https://black-labrador.github.io/atlas-landing/img/closing.jpg" alt="Terraced open-pit mine from above" loading="lazy">
   <div class="inner reveal">
     <h2>The supply chain needs an exchange.</h2>
-    <div class="btns"><a class="btn btn-light" href="https://trade.atlas.markets">Trade</a><a class="btn btn-ghost" href="mailto:charles@atlas.markets">Talk to our team</a></div>
+    <div class="btns"><a class="btn btn-light" href="/trade">Trade</a><a class="btn btn-ghost" href="mailto:charles@atlas.markets">Talk to our team</a></div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
     <div class="col"><a class="logo" href="/" style="color:#fff"><span class="mark" style="background:#fff;color:#0a0a0a">A</span>ATLAS MARKETS</a><span style="color:rgba(255,255,255,.45);font-size:13px;max-width:26em">Markets and indices for the critical-minerals supply chain.</span></div>
-    <div class="col"><h4>Product</h4><a href="https://trade.atlas.markets">Trade</a><a href="#indices">Indices</a><a href="/trade/api.html">API &amp; data</a></div>
+    <div class="col"><h4>Product</h4><a href="/trade">Trade</a><a href="#indices">Indices</a><a href="/trade/api.html">API &amp; data</a></div>
     <div class="col"><h4>Company</h4><a href="#who">About</a><a href="mailto:charles@atlas.markets">Contact</a><a href="/trade/api.html">Docs</a></div>
     <div class="col"><h4>Follow</h4><a href="https://x.com/atlasmarkets" rel="noopener">X</a><a href="https://www.linkedin.com/company/atlas-markets" rel="noopener">LinkedIn</a></div>
     <div class="legal"><span>© 2026 Atlas Markets</span><span><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a> &nbsp;·&nbsp; Public prices delayed 15 min</span></div>
@@ -374,7 +376,7 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 // ── market data: snapshot first, live overwrites ─────────────────────────
-const NAMES={'AI-USD':'AI Minerals','BATT-USD':'Battery Metals','REE-USD':'Rare Earths','LI-USD':'Lithium','CU-USD':'Copper','CO-USD':'Cobalt','NI-USD':'Nickel','AG-USD':'Silver'};
+const NAMES={'AI-USD':'AI Minerals','BATT-USD':'Battery Metals','REE-USD':'Rare Earths','LI-USD':'Lithium','CU-USD':'Copper','CO-USD':'Cobalt','NI-USD':'Nickel','AG-USD':'Silver','AL-USD':'Aluminum','ZN-USD':'Zinc','CO-USD':'Cobalt'};
 const UNITS={'LI-USD':'USD / tonne','CU-USD':'USD / lb','CO-USD':'USD / tonne','REE-USD':'USD / kg'};
 const ORDER=['AI-USD','BATT-USD','REE-USD','LI-USD','CU-USD','CO-USD','NI-USD','AG-USD'];
 const SNAP={'AI-USD':{markPrice:9042,priceChange24H:-0.06},'BATT-USD':{markPrice:32045,priceChange24H:-0.5},'REE-USD':{markPrice:2503,priceChange24H:0.73},'LI-USD':{markPrice:21514,priceChange24H:-0.57},'CU-USD':{markPrice:6.44,priceChange24H:1.75},'CO-USD':{markPrice:57583,priceChange24H:-1.37},'NI-USD':{markPrice:16971,priceChange24H:1.3},'AG-USD':{markPrice:58.73,priceChange24H:1.54}};
@@ -386,6 +388,7 @@ function render(){
     +`<div class="t-live"><span class="dot ${live?'':'amber'}"></span>${live?'LIVE':'DELAYED'}</div>`;
   document.querySelectorAll('[data-chip]').forEach(el=>{const m=M[el.dataset.chip];if(m)el.textContent='$'+fmt(parseFloat(m.markPrice||m.oraclePrice))});
   document.querySelectorAll('[data-idx]').forEach(el=>{const m=M[el.dataset.idx];if(!m)return;const c=parseFloat(m.priceChange24H||0);el.innerHTML=`$${fmt(parseFloat(m.markPrice||m.oraclePrice))}<small class="${c>=0?'up':'down'}">${pct(c)}</small>`});
+  if(live){const ks=Object.keys(M).filter(k=>NAMES[k]);if(ks.length)document.getElementById('stMk').textContent=ks.map(k=>NAMES[k]).join(' · ')}
   const ai=M['AI-USD'];if(ai)document.getElementById('panelPx').textContent='$'+fmt(parseFloat(ai.markPrice||ai.oraclePrice));
   renderBig();
 }
@@ -416,7 +419,7 @@ const big$=v=>v>=1e9?'$'+(v/1e9).toFixed(2)+'B':v>=1e6?'$'+Math.round(v/1e6)+'M'
 function setLive(asOf){
   document.getElementById('stDot').classList.remove('amber');
   const t=asOf?new Date(asOf):null;
-  document.getElementById('stSrc').textContent='Live from trade.atlas.markets'+(t?' · updated '+t.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'');
+  document.getElementById('stSrc').textContent='Live testnet data'+(t?' · updated '+t.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'');
 }
 async function loadVolume(){
   try{const r=await fetch(VOL_URL);if(!r.ok)throw 0;const d=await r.json();
@@ -427,7 +430,6 @@ async function loadStats(){
   try{const r=await fetch(STATS_URL);if(!r.ok)throw 0;const d=await r.json();const t=d.totals||{};
     if(t.volume24h)document.getElementById('st24').textContent=big$(t.volume24h);
     if(t.trades24h)document.getElementById('stTrades').textContent=Number(t.trades24h).toLocaleString();
-    const live=(d.rows||[]).filter(x=>x.kind!=='index').length;if(live)document.getElementById('stMk').innerHTML=live+' <span class="stat-of">of 17</span>';
   }catch(e){/* /api/stats has no CORS yet; static figures stay */}
 }
 render();load();loadSpark();loadVolume();loadStats();setInterval(load,10000);setInterval(loadVolume,15*60*1000);setInterval(loadStats,15*60*1000);
