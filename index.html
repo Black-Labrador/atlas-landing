@@ -163,6 +163,22 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;margin:0
 .closing h2{font-size:clamp(40px,6.4vw,84px);line-height:1.02;max-width:12em;margin:0 auto 36px;text-wrap:balance}
 .closing .btns{justify-content:center}
 
+/* contact */
+.contact{padding:clamp(80px,10vw,140px) 0;border-top:1px solid var(--line)}
+.contact .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,6vw,96px);align-items:start}
+.contact h2{font-size:clamp(36px,4.6vw,60px);line-height:1.06;margin:14px 0 18px}
+.c-form{display:flex;flex-direction:column;gap:18px}
+.f-row{display:flex;flex-direction:column;gap:7px}
+.f-row label{font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.f-row input,.f-row textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font:16px/1.4 var(--sans);outline:none;transition:border-color .15s}
+.f-row input:focus,.f-row textarea:focus{border-color:var(--ink)}
+.f-row textarea{resize:vertical;min-height:110px}
+.c-form .btn{align-self:flex-start;margin-top:4px}
+.c-form .btn:disabled{opacity:.55;transform:none;cursor:default}
+.f-msg{font-size:14px;min-height:20px;color:var(--ink-2)}
+.f-msg.ok{color:var(--accent)}.f-msg.err{color:#d9453d}
+@media(max-width:860px){.contact .wrap{grid-template-columns:1fr}}
+
 /* footer */
 footer{background:#0a0a0a;color:#fff;padding:64px 0 36px}
 footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
@@ -189,14 +205,14 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
       <a href="/trade/api.html">Data</a>
       <a href="#who">Company</a>
     </div>
-    <a class="btn btn-dark" href="mailto:charles@atlas.markets">Talk to our team</a>
+    <a class="btn btn-dark" href="#contact">Talk to our team</a>
   </div>
 </nav>
 
 <section class="hero">
   <img src="https://black-labrador.github.io/atlas-landing/img/hero.jpg" alt="Open-pit mine, aerial view" fetchpriority="high">
   <div class="inner">
-    <h1>The market for critical minerals.<br>The index for the <em>supply chain.</em></h1>
+    <h1>Building markets for the world’s <em>most important commodities.</em></h1>
     <p>Price, hedge and finance the minerals behind AI, defense and energy.</p>
     <div class="btns">
       <a class="btn btn-light" href="/trade">Trade</a>
@@ -324,7 +340,25 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
   <img src="https://black-labrador.github.io/atlas-landing/img/closing.jpg" alt="Terraced open-pit mine from above" loading="lazy">
   <div class="inner reveal">
     <h2>The supply chain needs an exchange.</h2>
-    <div class="btns"><a class="btn btn-light" href="/trade">Trade</a><a class="btn btn-ghost" href="mailto:charles@atlas.markets">Talk to our team</a></div>
+    <div class="btns"><a class="btn btn-light" href="/trade">Trade</a><a class="btn btn-ghost" href="#contact">Talk to our team</a></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="c-copy reveal">
+      <span class="kicker">Contact</span>
+      <h2>Talk to our team.</h2>
+      <p class="lede">Producers, manufacturers, traders, data licensees &mdash; tell us what you&rsquo;re working on and we&rsquo;ll come back to you.</p>
+    </div>
+    <form class="c-form reveal" id="contactForm" novalidate>
+      <div class="f-row"><label for="cfName">Name</label><input id="cfName" name="name" autocomplete="name" maxlength="120" required></div>
+      <div class="f-row"><label for="cfEmail">Email</label><input id="cfEmail" name="email" type="email" autocomplete="email" maxlength="200" required></div>
+      <div class="f-row"><label for="cfOrg">Company</label><input id="cfOrg" name="org" autocomplete="organization" maxlength="120"></div>
+      <div class="f-row"><label for="cfNote">Message</label><textarea id="cfNote" name="note" rows="4" maxlength="2000"></textarea></div>
+      <button class="btn btn-dark" id="cfBtn" type="submit">Send message</button>
+      <div class="f-msg" id="cfMsg" aria-live="polite"></div>
+    </form>
   </div>
 </section>
 
@@ -332,7 +366,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
   <div class="wrap">
     <div class="col"><a class="logo" href="/" style="color:#fff"><span class="mark" style="background:#fff;color:#0a0a0a">A</span>ATLAS MARKETS</a><span style="color:rgba(255,255,255,.45);font-size:13px;max-width:26em">Markets and indices for the critical-minerals supply chain.</span></div>
     <div class="col"><h4>Product</h4><a href="/trade">Trade</a><a href="#indices">Indices</a><a href="/trade/api.html">API &amp; data</a></div>
-    <div class="col"><h4>Company</h4><a href="#who">About</a><a href="mailto:charles@atlas.markets">Contact</a><a href="/trade/api.html">Docs</a></div>
+    <div class="col"><h4>Company</h4><a href="#who">About</a><a href="#contact">Contact</a><a href="/trade/api.html">Docs</a></div>
     <div class="col"><h4>Follow</h4><span>X</span><span>LinkedIn</span></div>
     <div class="legal"><span>© 2026 Atlas Markets</span><span><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a> &nbsp;·&nbsp; Public prices delayed 15 min</span></div>
   </div>
@@ -397,6 +431,20 @@ async function loadStats(){
     if(t.trades24h)document.getElementById('stTrades').textContent=Number(t.trades24h).toLocaleString();
   }catch(e){/* /api/stats has no CORS yet; static figures stay */}
 }
+// ── contact form → /v4/licensing-lead (same-origin on atlas.markets; records the lead and emails the team)
+document.getElementById('contactForm').addEventListener('submit',async ev=>{
+  ev.preventDefault();
+  const btn=document.getElementById('cfBtn'),msg=document.getElementById('cfMsg');
+  const body={name:cfName.value.trim(),email:cfEmail.value.trim(),org:cfOrg.value.trim(),note:cfNote.value.trim(),interest:'contact'};
+  if(!body.name||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email)){msg.className='f-msg err';msg.textContent='Please add your name and a valid email.';return}
+  btn.disabled=true;btn.textContent='Sending\u2026';msg.className='f-msg';msg.textContent='';
+  try{
+    const r=await fetch('/v4/licensing-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(r.ok){msg.className='f-msg ok';msg.textContent='Thanks \u2014 we\u2019ll be in touch shortly.';document.getElementById('contactForm').reset()}
+    else{const e=await r.json().catch(()=>({}));msg.className='f-msg err';msg.textContent=e.error||'Something went wrong \u2014 please try again.'}
+  }catch(e){msg.className='f-msg err';msg.textContent='Network error \u2014 please try again.'}
+  btn.disabled=false;btn.textContent='Send message';
+});
 render();load();loadSpark();loadVolume();loadStats();setInterval(load,10000);setInterval(loadVolume,15*60*1000);setInterval(loadStats,15*60*1000);
 </script>
 </body>
