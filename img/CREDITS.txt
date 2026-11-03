@@ -1,0 +1,13 @@
+Unsplash photo IDs (Unsplash License, free to use; attribution appreciated):
+hero            photo-1647969476632-17261bc91afa
+closing         photo-1571223641822-b82408a0e705
+lithium         photo-1701483807621-5163379bf771
+copper          photo-1660748255246-80f24d317070
+rare-earth      photo-1791356099225-82e4901ea804
+mfg-ev          photo-1777383975764-bec6f5cabf00
+mfg-datacenter  photo-1506399558188-acca6f8cbf41
+mfg-wind        photo-1729591476835-c907a6db1486
+mfg-jet         photo-1762208743487-11a4775c12f2
+who-producer    photo-1622645916455-aa13b87438ec
+who-manufacturer photo-1639246473723-5d6946d45878
+who-trader      photo-1744782211816-c5224434614f
