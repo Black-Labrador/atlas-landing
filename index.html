@@ -147,18 +147,6 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;margin:0
 .panel svg{width:100%;height:auto;display:block}
 @media(max-width:900px){.indices .wrap{grid-template-columns:1fr}}
 
-/* giant price */
-.big{padding:clamp(90px,12vw,170px) 0;text-align:center;border-bottom:1px solid var(--line)}
-.seg{display:inline-flex;gap:22px;font:500 12px/1 var(--mono);letter-spacing:.1em;color:var(--ink-3);margin-bottom:34px}
-.seg button{all:unset;cursor:pointer;padding:6px 2px;border-bottom:1.5px solid transparent;color:var(--ink-3)}
-.seg button.on{color:var(--ink);border-bottom-color:var(--ink)}
-.big .num{font-family:var(--serif);font-size:clamp(88px,15vw,210px);line-height:.95;letter-spacing:-.03em}
-.big .num sup{font-size:.42em;vertical-align:top;margin-top:.35em;display:inline-block;margin-right:.04em}
-.big .unit{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:22px 0 42px}
-.big .unit b{font-weight:500;color:var(--ink)}
-.rule{width:1px;height:70px;background:var(--ink);margin:0 auto 36px}
-.big p{color:var(--ink-2);max-width:30em;margin:0 auto 30px;font-size:17px}
-
 /* who */
 .who{padding:clamp(80px,10vw,140px) 0}
 .who .head{text-align:center;margin-bottom:clamp(40px,6vw,64px)}
@@ -202,7 +190,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
     <div class="nav-links">
       <a href="#metals">Metals</a>
       <a href="#indices">Indices</a>
-      <a href="#data">Data</a>
+      <a href="/trade/api.html">Data</a>
       <a href="#who">Company</a>
     </div>
     <a class="btn btn-dark" href="mailto:charles@atlas.markets">Talk to our team</a>
@@ -319,23 +307,12 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
         <div class="idx"><span class="tk">BATT-USD</span><span class="nm">Battery Metals<small>Lithium, cobalt and nickel — the cathode basket.</small></span><span class="px" data-idx="BATT-USD">—</span></div>
         <div class="idx"><span class="tk">REE-USD</span><span class="nm">Rare Earth Magnets<small>Nd, Pr, Dy, Tb — the four magnet metals.</small></span><span class="px" data-idx="REE-USD">—</span></div>
       </div>
-      <div class="btns"><a class="btn btn-light" href="/trade">Explore the indices</a><a class="btn btn-ghost" href="#data">See the data</a></div>
+      <div class="btns"><a class="btn btn-light" href="/trade">Explore the indices</a><a class="btn btn-ghost" href="/trade/api.html">See the data</a></div>
     </div>
     <div class="panel reveal">
       <div class="ph"><span>AI-USD · 24h</span><span id="panelPx">—</span></div>
       <svg id="spark" viewBox="0 0 600 260" preserveAspectRatio="none" aria-hidden="true"><path id="sparkFill" fill="rgba(23,179,127,.12)"></path><path id="sparkLine" fill="none" stroke="#17b37f" stroke-width="2" stroke-linejoin="round"></path></svg>
     </div>
-  </div>
-</section>
-
-<section class="big" id="data">
-  <div class="wrap reveal">
-    <div class="seg" id="seg"><button data-m="LI-USD" class="on">LI</button><button data-m="CU-USD">CU</button><button data-m="CO-USD">CO</button><button data-m="REE-USD">REE</button></div>
-    <div class="num" id="bigNum"><sup>$</sup>—</div>
-    <div class="unit" id="bigUnit">USD / tonne · <b>Atlas Spot</b></div>
-    <div class="rule"></div>
-    <p>Settled on Atlas. Updated continuously. The public feed is delayed fifteen minutes; licensees get it live.</p>
-    <a class="btn btn-grey" href="/trade/api.html">See the data</a>
   </div>
 </section>
 
@@ -377,12 +354,11 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 // ── market data: snapshot first, live overwrites ─────────────────────────
 const NAMES={'AI-USD':'AI Minerals','BATT-USD':'Battery Metals','REE-USD':'Rare Earths','LI-USD':'Lithium','CU-USD':'Copper','CO-USD':'Cobalt','NI-USD':'Nickel','AG-USD':'Silver','AL-USD':'Aluminum','ZN-USD':'Zinc','CO-USD':'Cobalt'};
-const UNITS={'LI-USD':'USD / tonne','CU-USD':'USD / lb','CO-USD':'USD / tonne','REE-USD':'USD / kg'};
 const ORDER=['AI-USD','BATT-USD','REE-USD','LI-USD','CU-USD','CO-USD','NI-USD','AG-USD'];
 const SNAP={'AI-USD':{markPrice:9042,priceChange24H:-0.06},'BATT-USD':{markPrice:32045,priceChange24H:-0.5},'REE-USD':{markPrice:2503,priceChange24H:0.73},'LI-USD':{markPrice:21514,priceChange24H:-0.57},'CU-USD':{markPrice:6.44,priceChange24H:1.75},'CO-USD':{markPrice:57583,priceChange24H:-1.37},'NI-USD':{markPrice:16971,priceChange24H:1.3},'AG-USD':{markPrice:58.73,priceChange24H:1.54}};
 const fmt=n=>Number(n).toLocaleString(undefined,{maximumFractionDigits:n<100?2:0});
 const pct=n=>(n>=0?'+':'')+Number(n).toFixed(2)+'%';
-let M=SNAP, live=false, sel='LI-USD';
+let M=SNAP, live=false;
 function render(){
   document.getElementById('tickerRow').innerHTML=ORDER.filter(k=>M[k]).map(k=>{const m=M[k],c=parseFloat(m.priceChange24H||0);return `<div class="t-item"><span class="t-name">${NAMES[k]}</span><span class="t-px">$${fmt(parseFloat(m.markPrice||m.oraclePrice))}</span><span class="t-chg ${c>=0?'up':'down'}">${pct(c)}</span></div>`}).join('')
     +`<div class="t-live"><span class="dot ${live?'':'amber'}"></span>${live?'LIVE':'DELAYED'}</div>`;
@@ -390,14 +366,7 @@ function render(){
   document.querySelectorAll('[data-idx]').forEach(el=>{const m=M[el.dataset.idx];if(!m)return;const c=parseFloat(m.priceChange24H||0);el.innerHTML=`$${fmt(parseFloat(m.markPrice||m.oraclePrice))}<small class="${c>=0?'up':'down'}">${pct(c)}</small>`});
   if(live){const ks=Object.keys(M).filter(k=>NAMES[k]);if(ks.length)document.getElementById('stMk').textContent=ks.map(k=>NAMES[k]).join(' · ')}
   const ai=M['AI-USD'];if(ai)document.getElementById('panelPx').textContent='$'+fmt(parseFloat(ai.markPrice||ai.oraclePrice));
-  renderBig();
 }
-function renderBig(){
-  const m=M[sel];if(!m)return;
-  document.getElementById('bigNum').innerHTML=`<sup>$</sup>${fmt(parseFloat(m.markPrice||m.oraclePrice))}`;
-  document.getElementById('bigUnit').innerHTML=`${UNITS[sel]||'USD'} · <b>Atlas Spot</b> · ${sel}`;
-}
-document.getElementById('seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;sel=b.dataset.m;document.querySelectorAll('#seg button').forEach(x=>x.classList.toggle('on',x===b));renderBig()});
 async function load(){
   try{const r=await fetch('/v4/perpetualMarkets');if(!r.ok)throw 0;const d=await r.json();M=d.markets||d;live=true;render()}catch(e){}
 }
