@@ -78,14 +78,15 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;margin:0
 
 /* stats band */
 .stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(40px,5vw,64px) 0}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr 2fr;gap:28px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
 .stat-n{font-family:var(--serif);font-size:clamp(40px,4.6vw,64px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .stat-of{font-size:.5em;color:var(--ink-3)}
-.stat-list{font-family:var(--serif);font-size:clamp(22px,2.1vw,30px);line-height:1.25;letter-spacing:-.01em}
-.stat-wide{grid-column:span 2}
+.mk-strip{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 22px}
+.mk-strip span{display:inline-flex;align-items:center;gap:8px;font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.mk-strip .dot{width:6px;height:6px;animation:none;box-shadow:none}
 .stat-l{margin-top:10px;font-size:13px;color:var(--ink-2)}
-.stat-src{margin-top:26px;display:flex;align-items:center;gap:9px;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:22px}.stat-wide{grid-column:span 2}}
+.stat-src{margin-top:22px;display:flex;align-items:center;gap:9px;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:22px}.mk-strip{gap:8px 16px}}
 
 /* metals grid */
 .metals{padding:clamp(80px,10vw,140px) 0 0}
@@ -221,8 +222,9 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
       <div class="stat"><div class="stat-n" id="stVol">$10B+</div><div class="stat-l">Traded on testnet since August</div></div>
       <div class="stat"><div class="stat-n" id="st24">$483M</div><div class="stat-l">24-hour volume</div></div>
       <div class="stat"><div class="stat-n" id="stTrades">5,358</div><div class="stat-l">Fills in the last 24 hours</div></div>
-      <div class="stat stat-wide"><div class="stat-list" id="stMk">Lithium · Copper · Cobalt · Nickel · Silver · Aluminum · Zinc · Rare Earths · AI Minerals · Battery Metals</div><div class="stat-l">Live markets · 17 at launch</div></div>
+      <div class="stat"><div class="stat-n" id="stMk">10</div><div class="stat-l">Live markets · 17 at launch</div></div>
     </div>
+    <div class="mk-strip" id="mkStrip"></div>
     <div class="stat-src"><span class="dot amber" id="stDot"></span><span id="stSrc">Testnet figures as of 2 November 2026</span></div>
   </div>
 </section>
@@ -359,12 +361,15 @@ const SNAP={'AI-USD':{markPrice:9042,priceChange24H:-0.06},'BATT-USD':{markPrice
 const fmt=n=>Number(n).toLocaleString(undefined,{maximumFractionDigits:n<100?2:0});
 const pct=n=>(n>=0?'+':'')+Number(n).toFixed(2)+'%';
 let M=SNAP, live=false;
+const LIVE_MARKETS={'LI-USD':1,'CU-USD':1,'CO-USD':1,'NI-USD':1,'AG-USD':1,'AL-USD':1,'ZN-USD':1,'REE-USD':1,'AI-USD':1,'BATT-USD':1};
 function render(){
   document.getElementById('tickerRow').innerHTML=ORDER.filter(k=>M[k]).map(k=>{const m=M[k],c=parseFloat(m.priceChange24H||0);return `<div class="t-item"><span class="t-name">${NAMES[k]}</span><span class="t-px">$${fmt(parseFloat(m.markPrice||m.oraclePrice))}</span><span class="t-chg ${c>=0?'up':'down'}">${pct(c)}</span></div>`}).join('')
     +`<div class="t-live"><span class="dot ${live?'':'amber'}"></span>${live?'LIVE':'DELAYED'}</div>`;
   document.querySelectorAll('[data-chip]').forEach(el=>{const m=M[el.dataset.chip];if(m)el.textContent='$'+fmt(parseFloat(m.markPrice||m.oraclePrice))});
   document.querySelectorAll('[data-idx]').forEach(el=>{const m=M[el.dataset.idx];if(!m)return;const c=parseFloat(m.priceChange24H||0);el.innerHTML=`$${fmt(parseFloat(m.markPrice||m.oraclePrice))}<small class="${c>=0?'up':'down'}">${pct(c)}</small>`});
-  if(live){const ks=Object.keys(M).filter(k=>NAMES[k]);if(ks.length)document.getElementById('stMk').textContent=ks.map(k=>NAMES[k]).join(' · ')}
+  const ks=Object.keys(live?M:LIVE_MARKETS).filter(k=>NAMES[k]);
+  document.getElementById('mkStrip').innerHTML=ks.map(k=>`<span><i class="dot"></i>${NAMES[k]}</span>`).join('');
+  document.getElementById('stMk').textContent=ks.length;
   const ai=M['AI-USD'];if(ai)document.getElementById('panelPx').textContent='$'+fmt(parseFloat(ai.markPrice||ai.oraclePrice));
 }
 async function load(){
