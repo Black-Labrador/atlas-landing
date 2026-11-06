@@ -228,7 +228,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
     <div class="stat-grid reveal">
       <div class="stat"><div class="stat-n" id="stVol">$10B+</div><div class="stat-l">Traded on testnet</div></div>
       <div class="stat"><div class="stat-n" id="st24">$483M</div><div class="stat-l">24-hour volume</div></div>
-      <div class="stat"><div class="stat-n" id="stTrades">5,358</div><div class="stat-l">Fills in the last 24 hours</div></div>
+      <div class="stat"><div class="stat-n" id="stTraders">21,668</div><div class="stat-l">Registered traders</div></div>
       <div class="stat"><div class="stat-n" id="stMk">10</div><div class="stat-l">Live markets</div></div>
     </div>
     <div class="mk-strip" id="mkStrip"></div>
@@ -423,12 +423,12 @@ function setLive(asOf){
 async function loadVolume(){
   try{const r=await fetch(VOL_URL);if(!r.ok)throw 0;const d=await r.json();
     if(d.volumeAllTime>0){document.getElementById('stVol').textContent=big$(d.volumeAllTime);setLive(d.asOf)}
+    if(d.registeredTraders>0)document.getElementById('stTraders').textContent=Number(d.registeredTraders).toLocaleString();
   }catch(e){/* keep the dated static figure */}
 }
 async function loadStats(){
   try{const r=await fetch(STATS_URL);if(!r.ok)throw 0;const d=await r.json();const t=d.totals||{};
     if(t.volume24h)document.getElementById('st24').textContent=big$(t.volume24h);
-    if(t.trades24h)document.getElementById('stTrades').textContent=Number(t.trades24h).toLocaleString();
   }catch(e){/* /api/stats has no CORS yet; static figures stay */}
 }
 // ── contact form → /v4/licensing-lead (same-origin on atlas.markets; records the lead and emails the team)
