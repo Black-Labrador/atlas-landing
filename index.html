@@ -380,13 +380,13 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 // ── market data: snapshot first, live overwrites ─────────────────────────
-const NAMES={'AI-USD':'AI Minerals','BATT-USD':'Battery Metals','REE-USD':'Rare Earths','LI-USD':'Lithium','CU-USD':'Copper','CO-USD':'Cobalt','NI-USD':'Nickel','AG-USD':'Silver','AL-USD':'Aluminum','ZN-USD':'Zinc','CO-USD':'Cobalt'};
-const ORDER=['AI-USD','BATT-USD','REE-USD','LI-USD','CU-USD','CO-USD','NI-USD','AG-USD'];
+const NAMES={'ACMI-USD':'Atlas Minerals Index','AI-USD':'AI Minerals','BATT-USD':'Battery Metals','REE-USD':'Rare Earths','LI-USD':'Lithium','CU-USD':'Copper','CO-USD':'Cobalt','NI-USD':'Nickel','AG-USD':'Silver','AL-USD':'Aluminum','ZN-USD':'Zinc','CO-USD':'Cobalt'};
+const ORDER=['ACMI-USD','AI-USD','REE-USD','LI-USD','CU-USD','CO-USD','NI-USD','AG-USD','AL-USD','ZN-USD'];
 const SNAP={'AI-USD':{markPrice:9042,priceChange24H:-0.06},'BATT-USD':{markPrice:32045,priceChange24H:-0.5},'REE-USD':{markPrice:2503,priceChange24H:0.73},'LI-USD':{markPrice:21514,priceChange24H:-0.57},'CU-USD':{markPrice:6.44,priceChange24H:1.75},'CO-USD':{markPrice:57583,priceChange24H:-1.37},'NI-USD':{markPrice:16971,priceChange24H:1.3},'AG-USD':{markPrice:58.73,priceChange24H:1.54}};
 const fmt=n=>Number(n).toLocaleString(undefined,{maximumFractionDigits:n<100?2:0});
 const pct=n=>(n>=0?'+':'')+Number(n).toFixed(2)+'%';
 let M=SNAP, live=false;
-const LIVE_MARKETS={'LI-USD':1,'CU-USD':1,'CO-USD':1,'NI-USD':1,'AG-USD':1,'AL-USD':1,'ZN-USD':1,'REE-USD':1,'AI-USD':1,'BATT-USD':1};
+const LIVE_MARKETS={'ACMI-USD':1,'LI-USD':1,'CU-USD':1,'CO-USD':1,'NI-USD':1,'AG-USD':1,'AL-USD':1,'ZN-USD':1,'REE-USD':1,'AI-USD':1,'BATT-USD':1};
 function render(){
   const refPx=m=>parseFloat(m.oraclePrice||m.markPrice), refChg=m=>m.oracleChange24H!=null?parseFloat(m.oracleChange24H):(m.oracleSource==='v5'?null:parseFloat(m.priceChange24H||0));
   document.getElementById('tickerRow').innerHTML=ORDER.filter(k=>M[k]).map(k=>{const m=M[k],c=refChg(m);return `<div class="t-item"><span class="t-name">${NAMES[k]}</span><span class="t-px">$${fmt(refPx(m))}</span>${c==null?'':`<span class="t-chg ${c>=0?'up':'down'}">${pct(c)}</span>`}</div>`}).join('')
