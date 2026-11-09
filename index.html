@@ -313,7 +313,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);margin
       <h2>One ticker for a whole supply chain.</h2>
       <div class="idx-list">
         <div class="idx"><span class="tk">AI-USD</span><span class="nm">AI Critical Minerals<small>The metals inside AI capex — chips, servers, power and cooling.</small></span><span class="px" data-idx="AI-USD">—</span></div>
-        <div class="idx"><span class="tk">BATT-USD</span><span class="nm">Battery Metals<small>Lithium, cobalt and nickel — the cathode basket.</small></span><span class="px" data-idx="BATT-USD">—</span></div>
+        <div class="idx"><span class="tk">ACMI-USD</span><span class="nm">Atlas Critical Minerals<small>The flagship basket — every live Atlas mineral market in one level.</small></span><span class="px" data-idx="ACMI-USD">—</span></div>
         <div class="idx"><span class="tk">REE-USD</span><span class="nm">Rare Earth Magnets<small>Nd, Pr, Dy, Tb — the four magnet metals.</small></span><span class="px" data-idx="REE-USD">—</span></div>
       </div>
       <div class="btns"><a class="btn btn-light" href="/trade">Explore the indices</a><a class="btn btn-ghost" href="/trade/api.html">See the data</a></div>
@@ -388,17 +388,19 @@ const pct=n=>(n>=0?'+':'')+Number(n).toFixed(2)+'%';
 let M=SNAP, live=false;
 const LIVE_MARKETS={'LI-USD':1,'CU-USD':1,'CO-USD':1,'NI-USD':1,'AG-USD':1,'AL-USD':1,'ZN-USD':1,'REE-USD':1,'AI-USD':1,'BATT-USD':1};
 function render(){
-  document.getElementById('tickerRow').innerHTML=ORDER.filter(k=>M[k]).map(k=>{const m=M[k],c=parseFloat(m.priceChange24H||0);return `<div class="t-item"><span class="t-name">${NAMES[k]}</span><span class="t-px">$${fmt(parseFloat(m.markPrice||m.oraclePrice))}</span><span class="t-chg ${c>=0?'up':'down'}">${pct(c)}</span></div>`}).join('')
+  const refPx=m=>parseFloat(m.oraclePrice||m.markPrice), refChg=m=>m.oracleChange24H!=null?parseFloat(m.oracleChange24H):(m.oracleSource==='v5'?null:parseFloat(m.priceChange24H||0));
+  document.getElementById('tickerRow').innerHTML=ORDER.filter(k=>M[k]).map(k=>{const m=M[k],c=refChg(m);return `<div class="t-item"><span class="t-name">${NAMES[k]}</span><span class="t-px">$${fmt(refPx(m))}</span>${c==null?'':`<span class="t-chg ${c>=0?'up':'down'}">${pct(c)}</span>`}</div>`}).join('')
     +`<div class="t-live"><span class="dot ${live?'':'amber'}"></span>${live?'LIVE':'DELAYED'}</div>`;
-  document.querySelectorAll('[data-chip]').forEach(el=>{const m=M[el.dataset.chip];if(m)el.textContent='$'+fmt(parseFloat(m.markPrice||m.oraclePrice))});
-  document.querySelectorAll('[data-idx]').forEach(el=>{const m=M[el.dataset.idx];if(!m)return;const c=parseFloat(m.priceChange24H||0);el.innerHTML=`$${fmt(parseFloat(m.markPrice||m.oraclePrice))}<small class="${c>=0?'up':'down'}">${pct(c)}</small>`});
+  document.querySelectorAll('[data-chip]').forEach(el=>{const m=M[el.dataset.chip];if(m)el.textContent='$'+fmt(refPx(m))});
+  document.querySelectorAll('[data-idx]').forEach(el=>{const m=M[el.dataset.idx];if(!m)return;const c=refChg(m);el.innerHTML=`$${fmt(refPx(m))}`+(c==null?'':`<small class="${c>=0?'up':'down'}">${pct(c)}</small>`)});
   const ks=Object.keys(live?M:LIVE_MARKETS).filter(k=>NAMES[k]);
   document.getElementById('mkStrip').innerHTML=ks.map(k=>`<span><i class="dot"></i>${NAMES[k]}</span>`).join('');
   document.getElementById('stMk').textContent=ks.length;
-  const ai=M['AI-USD'];if(ai)document.getElementById('panelPx').textContent='$'+fmt(parseFloat(ai.markPrice||ai.oraclePrice));
+  const ai=M['AI-USD'];if(ai)document.getElementById('panelPx').textContent='$'+fmt(refPx(ai));
 }
+const DATA_URL='https://data.atlas.markets/v4/perpetualMarkets';
 async function load(){
-  try{const r=await fetch('/v4/perpetualMarkets');if(!r.ok)throw 0;const d=await r.json();M=d.markets||d;live=true;render()}catch(e){}
+  try{const r=await fetch(DATA_URL);if(!r.ok)throw 0;const d=await r.json();M=d.markets||d;live=true;render()}catch(e){}
 }
 // sparkline from real hourly candles when reachable; else a quiet synthetic walk
 function drawSpark(vals){
